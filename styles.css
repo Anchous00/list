@@ -1,0 +1,300 @@
+/* ============================================================
+   style.css — тёмная тема для генерируемых отчётов
+   Самодостаточный файл. Подключается через <link rel="stylesheet">.
+   ============================================================ */
+
+/* ---------- Палитра ---------- */
+:root {
+  color-scheme: dark;
+
+  /* Фоны */
+  --bg:        #0d1117;   /* основной фон страницы */
+  --surface:   #161b22;   /* карточки, поля, блоки кода */
+  --surface-2: #1c2128;   /* hover, выделенные строки */
+
+  /* Текст */
+  --text:      #e6edf3;   /* основной */
+  --muted:     #8d96a0;   /* подписи, метаданные */
+  --faint:     #6e7681;   /* совсем бледный, для разделителей */
+
+  /* Границы */
+  --border:    #30363d;
+  --border-hi: #444c56;   /* hover/фокус */
+
+  /* Акцент (один!) */
+  --accent:      #58a6ff;
+  --accent-hi:   #79b8ff;
+  --accent-soft: rgba(88, 166, 255, 0.12);
+
+  /* Семантика — пригодится для статусов в отчётах */
+  --ok:    #3fb950;
+  --warn:  #d29922;
+  --error: #f85149;
+
+  /* Геометрия */
+  --radius: 8px;
+  --radius-sm: 5px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.25);
+
+  /* Типографика */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+               "Liberation Mono", monospace;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body, h1, h2, h3, h4, p, ul, ol, figure, blockquote { margin: 0; }
+ul, ol { padding: 0; list-style-position: inside; }
+
+/* ---------- Страница ---------- */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 3rem 1.25rem 4rem;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: linear-gradient(180deg, #0b0f14 0%, var(--bg) 240px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ---------- Заголовки ---------- */
+h1, h2, h3, h4 {
+  line-height: 1.25;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+h1 {
+  font-size: 1.875rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  /* лёгкий акцент под заголовком — визуальная «зацепка» */
+  background-image: linear-gradient(90deg, var(--accent), transparent 40%);
+  background-repeat: no-repeat;
+  background-size: 64px 2px;
+  background-position: 0 calc(100% - 1px);
+}
+h2 { font-size: 1.3rem;  margin-top: 2rem; }
+h3 { font-size: 1.1rem;  margin-top: 1.5rem; }
+h4 { font-size: 1rem;    margin-top: 1.25rem; color: var(--muted);
+     text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.8rem; }
+
+/* ---------- Абзацы и списки ---------- */
+p { margin-bottom: 1rem; }
+small { font-size: 0.85em; color: var(--muted); }
+
+ul, ol { margin-bottom: 1rem; padding-left: 1.25rem; }
+li { margin-bottom: 0.35rem; }
+li::marker { color: var(--faint); }
+
+/* ---------- Ссылки ---------- */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color .15s ease, border-color .15s ease;
+}
+a:hover { color: var(--accent-hi); border-bottom-color: currentColor; }
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ---------- Инлайн-код ---------- */
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 0.12em 0.4em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: #e6edf3;
+  white-space: nowrap;
+}
+
+/* ---------- Блок кода ---------- */
+pre {
+  margin: 1.25rem 0;
+  padding: 1rem 1.15rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: auto;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  white-space: pre;
+  font-size: inherit;
+}
+
+/* ---------- Цитата ---------- */
+blockquote {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1.15rem;
+  color: var(--muted);
+  background: var(--surface);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* ---------- Таблицы ---------- */
+table {
+  width: 100%;
+  margin: 1.25rem 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+th, td {
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--surface-2);
+}
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover td { background: var(--surface-2); }
+
+/* Числа — по правому краю (укажите класс в C: class="num") */
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Разделитель ---------- */
+hr {
+  border: 0;
+  height: 1px;
+  margin: 2rem 0;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* ---------- Бейджи статуса ---------- */
+/* <span class="badge ok">OK</span> */
+.badge {
+  display: inline-block;
+  padding: 0.15em 0.55em;
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(88, 166, 255, 0.3);
+  vertical-align: 1px;
+}
+.badge.ok    { background: rgba(63, 185, 80, 0.12);  color: var(--ok);
+               border-color: rgba(63, 185, 80, 0.35); }
+.badge.warn  { background: rgba(210, 153, 34, 0.12); color: var(--warn);
+               border-color: rgba(210, 153, 34, 0.35); }
+.badge.error { background: rgba(248, 81, 73, 0.12);  color: var(--error);
+               border-color: rgba(248, 81, 73, 0.35); }
+
+/* ---------- Кнопки (если вдруг понадобятся) ---------- */
+button, .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.45em 0.9em;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+button:hover, .btn:hover {
+  background: var(--border);
+  border-color: var(--border-hi);
+}
+button:focus-visible, .btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Поля формы ---------- */
+input, select, textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45em 0.7em;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ---------- Шапка/подвал (если добавите <header>/<footer>) ---------- */
+header.page, footer.page {
+  max-width: 760px;
+  margin: 0 auto 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+footer.page {
+  margin: 3rem auto 0;
+  padding-top: 1rem;
+  padding-bottom: 0;
+  border-bottom: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Мелочи для полировки ---------- */
+::selection { background: rgba(88, 166, 255, 0.3); color: #fff; }
+
+/* Тонкий скроллбар (WebKit/Chromium/Safari) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--border-hi); }
+
+/* Скроллбар в Firefox */
+* { scrollbar-color: var(--border) transparent; scrollbar-width: thin; }
+
+/* ---------- Печать: инвертируем в светлое, чтобы не жгло бумагу ---------- */
+@media print {
+  body { background: #fff; color: #111; }
+  a    { color: #0645ad; }
+  pre, code, table, blockquote { background: #f6f8fa; border-color: #d0d7de; }
+  th   { background: #eef1f4; }
+}
