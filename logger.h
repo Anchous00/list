@@ -12,10 +12,10 @@
 
 enum log_status
 {
-    LOG_INFO    = 1,
-    LOG_ERROR   = 2,
-    LOG_ACTION  = 3,
-    LOG_DEFAULT = 4
+    myLOG_INFO    = 1,
+    myLOG_ERROR   = 2,
+    myLOG_ACTION  = 3,
+    myLOG_DEFAULT = 4
 };
 
 const int MAX_LOG_MESSAGE_LEN = 100;

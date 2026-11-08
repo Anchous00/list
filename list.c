@@ -50,7 +50,7 @@ void list_push_front( list_t *list, list_elem_t value )
     list->nodes[index].next = 0;
     list->nodes[0].prev = index;
 
-    ON_LOG(LOG(LOG_ACTION, "push" list_spec" to list front", value);
+    ON_LOG(LOG(myLOG_ACTION, "push" list_spec" to list front", value);
                 list_draw_graph(list);)
 
     return;
@@ -74,7 +74,7 @@ void list_push_back( list_t *list, list_elem_t value )
     list->nodes[index].prev = 0;
     list->nodes[0].next = index;
 
-    ON_LOG(LOG(LOG_ACTION, "push" list_spec" to list back", value);
+    ON_LOG(LOG(myLOG_ACTION, "push" list_spec" to list back", value);
                 list_draw_graph(list);)
 
     return;
@@ -102,8 +102,8 @@ void list_insert( list_t *list, list_elem_t value, size_t pos )
     list->nodes[list->nodes[index].next].prev = free_index;
     list->nodes[index].next = free_index;
 
-    ON_LOG(LOG(LOG_ACTION, "push" list_spec" to list pos %zu", value, (size_t)2);)
-    list_draw_graph(list);
+    ON_LOG(LOG(myLOG_ACTION, "push" list_spec" to list pos %zu", value, (size_t)2);
+    list_draw_graph(list);)
 
     return;
 }
@@ -121,8 +121,8 @@ void list_pop_back( list_t *list )
 
     list->nodes[list->free].next = second_free;
 
-    ON_LOG(LOG(LOG_ACTION, "pop from list back");)
-    list_draw_graph(list);
+    ON_LOG(LOG(myLOG_ACTION, "pop from list back");
+    list_draw_graph(list);)
 
     return;
 }
@@ -140,7 +140,7 @@ void list_pop_front( list_t *list )
 
     list->nodes[list->free].next = second_free;
 
-    ON_LOG(LOG(LOG_ACTION, "pop from list front");
+    ON_LOG(LOG(myLOG_ACTION, "pop from list front");
     list_draw_graph(list);)
 
     return;
@@ -165,8 +165,8 @@ void list_erase( list_t *list, size_t pos )
 
     list->nodes[list->free].next = second_free;
 
-    ON_LOG(LOG(LOG_ACTION, "erase from list pos %zu", pos);)
-    list_draw_graph(list);
+    ON_LOG(LOG(myLOG_ACTION, "erase from list pos %zu", pos);)
+    ON_LOG(list_draw_graph(list);)
 
     return;
 }
@@ -220,9 +220,10 @@ void list_draw_graph( list_t *list )
 
 //printing list
     fprintf(graph,  "digraph List{\n"
+                    "sortv=1;"
                     "bgcolor=\"transparent\";\n"
                     "rankdir=RL;\n"
-                    "node [shape=record, fontname=\"monospace\"];\n"
+                    "node [shape=record, fontname=\"Courier\"];\n"
                     "edge [color=\"#569cd6\"];\n"
                     "0 [label=\" value = NULL_ELEM | index = 0 | {<prev> prev = %zu | <next> next = %zu}\", style=\"rounded,filled\", fillcolor=\"#9fa19f\"];\n", list->nodes[0].prev, list->nodes[0].next);
 
@@ -250,15 +251,20 @@ void list_draw_graph( list_t *list )
 
 //printing list of free elems
 
-    fprintf(graph, "digraph Free {\nbgcolor=\"transparent\";\nrankdir=RL;\nnode [shape=record, fontname=\"monospace\"];\nedge [color=\"#e1f35c\"];\n");
+    fprintf(graph,  "digraph Free {\n"
+                    "sortv=2;"
+                    "bgcolor=\"transparent\";\n"
+                    "rankdir=RL;\n"
+                    "node [shape=record, fontname=\"Courier\"];\n"
+                    "edge [color=\"#cacbc0\"];\n");
 
 
     for (size_t i = list->free; i != 0 ; i = list->nodes[i].next)
     {
-        fprintf(graph, "%zu [label=\" value = FREE | index = %zu |<next> next = %zu\", style=\"rounded,filled\", fillcolor=\"#4ce372\"];\n", i, i, list->nodes[i].next);
+        fprintf(graph, "%zu [label=\" value = FREE | index = %zu |<next> next = %zu\", style=\"rounded,filled\", fillcolor=\"#afea26\"];\n", i, i, list->nodes[i].next);
     }
 
-    for (size_t i = list->nodes[0].next; i != 0; i = list->nodes[i].next)
+    for (size_t i = list->free; list->nodes[i].next != 0; i = list->nodes[i].next)
     {
         fprintf(graph, "%zu->%zu;\n", i, list->nodes[i].next);
     }
@@ -275,10 +281,12 @@ void list_draw_graph( list_t *list )
         printf("can't close graph file\n");
 
     char dot_cmd[1024] = {};
-    snprintf(dot_cmd, sizeof(dot_cmd), "dot %s -Tsvg -o logs/%s%ld.svg", file_path, time_str, ts.tv_nsec);
+    //snprintf(dot_cmd, sizeof(dot_cmd), "gvpack -u -g logs/%s%ld.gv | dot -Tsvg -o logs/%s%ld.svg", time_str, ts.tv_nsec, time_str, ts.tv_nsec);
+    snprintf(dot_cmd, sizeof(dot_cmd), "ccomps -x logs/%s%ld.gv | dot | gvpack -array_u2 -m 240 | neato -n2 -Tsvg -o logs/%s%ld.svg", time_str, ts.tv_nsec, time_str, ts.tv_nsec);
+
     system(dot_cmd);
 
-    ON_LOG(LOG(LOG_DEFAULT, "<img src=\"logs/%s%ld.svg\">", time_str, ts.tv_nsec);)
+    ON_LOG(LOG(myLOG_DEFAULT, "<img src=\"logs/%s%ld.svg\">", time_str, ts.tv_nsec);)
 
     return;
 }

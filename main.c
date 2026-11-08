@@ -4,8 +4,9 @@
 #include <time.h>
 //TODO гистограмму такты(тесты) для двух реализаций gnuplot/raylib
 //TODO вывод free
-void list_print         ( list_t* list );
-void list_dump          ( list_t* list );
+
+const int TEST_AMOUNT = 100;
+
 void list_stress_test   ( list_t *list );
 
 int main( void )
@@ -13,7 +14,7 @@ int main( void )
     ON_LOG( system("rm -rf logs");
             system("mkdir logs");
             log_file_open("log.html");
-            LOG(LOG_DEFAULT, "<pre>");)
+            LOG(myLOG_DEFAULT, "<pre>");)
 
     list_t list = {};
     list_init(&list, 5);
@@ -44,7 +45,7 @@ int main( void )
                 printf("adding %d to front\n", value);
                 break;
             case '3':
-                list_dump(&list);
+                //list_dump(&list);
                 break;
             case '4':
                 list_draw_graph(&list);
@@ -76,50 +77,50 @@ int main( void )
     return 0;
 }
 
-void list_dump( list_t* list )
-{
-    printf("free: %4zu\n", list->free);
-    printf("   #");
-    for (size_t i = 0; i < list->capacity; i++)
-    {
-        printf("%4zu", i);
-    }
-    printf("\n");
-    printf(" val");
-    for (size_t i = 0; i < list->capacity; i++)
-    {
-        printf(list_spec, list->nodes[i].value);
-    }
-    printf("\n");
-    printf("next");
-    for (size_t i = 0; i < list->capacity; i++)
-    {
-        printf("%4zu", list->nodes[i].next);
-    }
-    printf("\n");
-    printf("prev");
-    for (size_t i = 0; i < list->capacity; i++)
-    {
-        printf("%4zu", list->nodes[i].prev);
-    }
-    printf("\n\n");
-    return;
-}
-
-void list_print( list_t* list )
-{
-    for (size_t i = list->nodes[0].next; i != 0 ; i = list->nodes[i].next)
-    {
-        printf(list_spec, list->nodes[i].value);
-    }
-    printf("\n");
-    return;
-}
+// void list_dump( list_t* list )
+// {
+//     printf("free: %4zu\n", list->free);
+//     printf("   #");
+//     for (size_t i = 0; i < list->capacity; i++)
+//     {
+//         printf("%4zu", i);
+//     }
+//     printf("\n");
+//     printf(" val");
+//     for (size_t i = 0; i < list->capacity; i++)
+//     {
+//         printf(list_spec, list->nodes[i].value);
+//     }
+//     printf("\n");
+//     printf("next");
+//     for (size_t i = 0; i < list->capacity; i++)
+//     {
+//         printf("%4zu", list->nodes[i].next);
+//     }
+//     printf("\n");
+//     printf("prev");
+//     for (size_t i = 0; i < list->capacity; i++)
+//     {
+//         printf("%4zu", list->nodes[i].prev);
+//     }
+//     printf("\n\n");
+//     return;
+// }
+//
+// void list_print( list_t* list )
+// {
+//     for (size_t i = list->nodes[0].next; i != 0 ; i = list->nodes[i].next)
+//     {
+//         printf(list_spec, list->nodes[i].value);
+//     }
+//     printf("\n");
+//     return;
+// }
 
 void list_stress_test( list_t *list )
 {
     clock_t t0 = clock();
-    for (size_t i = 0; i < 500; i++)
+    for (size_t i = 0; i < TEST_AMOUNT; i++)
     {
         switch (i % 6)
         {
